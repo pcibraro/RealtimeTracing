@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<div id="messages">
+
+</div>
+@section Scripts
+     {
+<script type="text/javascript">
+    $(function () {
+        var messages = $('#messages');
+
+        var connection = $.hubConnection('http://localhost:8080');
+        connection.start()
+            .done(function () {
+                console.log("Connected, transport = " + connection.transport.name);
+            })
+            .fail(function () { console.log('Could not connect'); });
+
+        var proxy = connection.createHubProxy('EventsHub');
+
+        proxy.on('PushEvent', function (message) {
+            messages.append(message + "<br>");
+        });
+    });
+</script>
+}
